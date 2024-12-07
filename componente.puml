@@ -1,0 +1,57 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(Backend, "Spring Boot Microservices") {
+    Component(CurriculumController, "Curriculum Controller", "REST Controller", "Gestiona programación curricular y contenido educativo.")
+    Component(ActivityController, "Activity Controller", "REST Controller", "Administra actividades y tareas de los estudiantes.")
+    Component(EvaluationController, "Evaluation Controller", "REST Controller", "Gestiona evaluaciones y reportes.")
+    Component(EventService, "Event Service", "Service", "Publica y consume eventos educativos en Event Store.")
+    Component(ReportingService, "Reporting Service", "Service", "Genera reportes y métricas detalladas.")
+    Component(DatabaseService, "Database Service", "Service", "Encapsula la interacción con PostgreSQL.")
+    Component(CacheService, "Cache Service", "Service", "Gestiona el acceso a datos temporales en Redis.")
+}
+
+Container_Boundary(Frontend, "Frontend Interfaces") {
+    Component(PWA, "Progressive Web App (PWA)", "React.js", "Interfaz para docentes y MINEDU.")
+    Component(AndroidApp, "Aplicación Android", "Kotlin + ARCore", "Interfaz móvil para estudiantes y cuidadores.")
+    Component(iOSApp, "Aplicación iOS", "SwiftUI + ARKit", "Versión iOS de la aplicación móvil.")
+}
+
+Boundary(Infrastructure, "Infraestructura y Servicios Externos") {
+    Component(AuthService, "Firebase Auth", "Servicio de autenticación", "Gestión de autenticación de usuarios.")
+    Component(ARCore, "ARCore", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en Android.")
+    Component(ARKit, "ARKit", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en iOS.")
+    Component(EventStore, "Event Store", "Kafka", "Registro de eventos educativos en tiempo real.")
+    Component(Redis, "Redis Cache", "Sistema de caché", "Almacena datos temporales para optimizar consultas.")
+    Component(PostgreSQL, "PostgreSQL Database", "Base de datos", "Almacena información curricular, actividades y progreso.")
+    Component(Elastic, "Elasticsearch", "Motor de búsqueda", "Genera métricas y reportes avanzados.")
+}
+
+PWA -> CurriculumController: Solicitar contenido educativo
+PWA -> ActivityController: Crear y asignar actividades
+PWA -> EvaluationController: Consultar reportes y evaluaciones
+
+AndroidApp -> ActivityController: Consultar actividades asignadas
+AndroidApp -> EvaluationController: Reportar progreso en tareas
+AndroidApp -> ARCore: Interacción en Realidad Aumentada
+
+iOSApp -> ActivityController: Consultar actividades asignadas
+iOSApp -> EvaluationController: Reportar progreso en tareas
+iOSApp -> ARKit: Interacción en Realidad Aumentada
+
+CurriculumController -> DatabaseService: Consultar contenido educativo
+ActivityController -> DatabaseService: Guardar tareas y progreso
+EvaluationController -> DatabaseService: Consultar reportes y progreso
+DatabaseService -> PostgreSQL: Consultas de datos persistentes
+
+EvaluationController -> CacheService: Consultar progreso temporal
+CacheService -> Redis: Acceso rápido a datos cacheados
+
+EventService -> EventStore: Publicar y consumir eventos educativos
+EvaluationController -> Elastic: Consultar métricas y reportes analíticos
+
+AuthService -> PWA: Autenticación de docentes y MINEDU
+AuthService -> AndroidApp: Autenticación de cuidadores y estudiantes
+AuthService -> iOSApp: Autenticación de cuidadores y estudiantes
+
+@enduml

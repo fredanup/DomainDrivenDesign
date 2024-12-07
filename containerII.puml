@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(Backend, "Backend Microservices") {
+    Container(API_Gateway, "API Gateway", "Spring Boot", "Orquesta solicitudes entre frontend y microservicios.")
+    Container(GestionCurricular, "Gestión Curricular", "Spring Boot", "Maneja la programación curricular y los contenidos educativos.")
+    Container(GestionActividades, "Gestión de Actividades", "Spring Boot", "Administra actividades, asignaciones y progreso.")
+    Container(Evaluaciones, "Evaluaciones y Seguimiento", "Spring Boot", "Genera reportes y gestiona evaluaciones.")
+}
+
+API_Gateway -> GestionCurricular: Gestión de contenidos y currículo
+API_Gateway -> GestionActividades: Gestión de actividades y progreso
+API_Gateway -> Evaluaciones: Evaluación y generación de reportes
+
+@enduml

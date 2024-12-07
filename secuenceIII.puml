@@ -1,0 +1,15 @@
+@startuml
+actor "MINEDU" as M
+boundary "Progressive Web App (PWA)" as PWA
+boundary "API Gateway" as APIGW
+control "Evaluaciones y Seguimiento" as Evaluaciones
+collections "Elasticsearch" as Elastic
+
+M -> PWA: Consultar reportes
+PWA -> APIGW: Solicitar métricas
+APIGW -> Evaluaciones: Generar reporte consolidado
+Evaluaciones -> Elastic: Consultar datos analíticos
+Elastic --> Evaluaciones: Retornar métricas consolidadas
+Evaluaciones --> APIGW: Enviar datos del reporte
+APIGW --> PWA: Mostrar métricas a MINEDU
+@enduml

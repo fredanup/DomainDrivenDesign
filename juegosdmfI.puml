@@ -1,0 +1,16 @@
+@startuml
+!define BoundedContext rectangle
+
+actor MINEDU as M
+
+BoundedContext "Game Management Context" as GameMgmt #pink
+BoundedContext "Curricular Management Context" as CurricularMgmt #yellow
+BoundedContext "Event Management Context" as EventMgmt #grey
+
+M -> GameMgmt : CrearJuegoRA
+GameMgmt -> CurricularMgmt : Consultar matriz de aprendizaje
+GameMgmt -> EventMgmt : JuegoRACreado
+
+M -> GameMgmt : LanzarJuegoRA
+GameMgmt -> EventMgmt : JuegoRALanzado
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+!define BoundedContext rectangle
+
+actor Cuidador as C
+actor Docente as D
+
+BoundedContext "Notifications Context" as NotifMgmt #SkyBlue
+BoundedContext "Session Management Context" as SessionMgmt #orange
+BoundedContext "Event Management Context" as EventMgmt #grey
+
+SessionMgmt -> NotifMgmt : Solicitar notificación de progreso
+NotifMgmt -> NotifMgmt : Generar notificación
+NotifMgmt -> EventMgmt : NotificacionEnviada
+
+NotifMgmt -> C : Enviar notificación
+NotifMgmt -> D : Enviar recordatorio
+@enduml

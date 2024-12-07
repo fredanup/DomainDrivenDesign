@@ -1,0 +1,14 @@
+@startuml
+
+package "Backend" {
+    component "API Gateway" as APIGW  
+}
+
+package "Autenticación" {
+    component "Firebase Auth" as Firebase
+    component "OAuth2 + JWT" as OAuth2JWT
+}
+
+Firebase --> APIGW : Validar autenticación
+OAuth2JWT --> APIGW : Autorizar solicitudes
+@enduml

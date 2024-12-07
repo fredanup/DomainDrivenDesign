@@ -1,0 +1,25 @@
+@startuml
+actor "Docente" as D
+boundary "Progressive Web App (PWA)" as PWA
+boundary "API Gateway" as APIGW
+control "Gestión Curricular" as GestionCurricular
+control "Gestión de Actividades" as GestionActividades
+database "PostgreSQL Database" as PostgreSQL
+collections "Event Store" as EventStore
+
+D -> PWA: Planificar actividad
+PWA -> APIGW: Enviar detalles de actividad
+APIGW -> GestionActividades: Registrar nueva actividad
+GestionActividades -> PostgreSQL: Guardar detalles de actividad
+PostgreSQL --> GestionActividades: Confirmación de registro
+GestionActividades --> APIGW: Actividad registrada
+APIGW --> PWA: Confirmación al docente
+
+D -> PWA: Asignar actividad
+PWA -> APIGW: Solicitar asignación
+APIGW -> GestionActividades: Asignar actividad a estudiantes
+GestionActividades -> EventStore: Registrar evento de asignación
+EventStore --> GestionActividades: Confirmación de registro
+GestionActividades --> APIGW: Asignación realizada
+APIGW --> PWA: Confirmación al docente
+@enduml

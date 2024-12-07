@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(Docente, "Docente", "Planifica actividades, evalúa progreso y consulta reportes.")
+Person(Minedu, "MINEDU", "Supervisa la programación curricular, crea juegos de RA y consulta reportes.")
+Person(NinoTEA, "Niño con TEA", "Participa en actividades y juegos educativos diseñados para su aprendizaje.")
+Person(Cuidador, "Cuidador", "Asiste al niño durante las actividades y comunica observaciones al docente.")
+
+System_Boundary(Sistema, "TEAprendo") {
+    System(PWA, "Progressive Web App (PWA)", "React.js", "Plataforma utilizada por docentes y MINEDU para gestionar actividades y supervisar.")
+    System(MobileApp, "Aplicación Móvil", "Kotlin/Swift", "Interfaz móvil utilizada por estudiantes y cuidadores para participar en actividades y juegos de RA.")
+    System(Backend, "Backend Microservicios", "Spring Boot", "Gestiona la lógica de negocio y almacena datos.")
+}
+
+Rel(Docente, PWA, "Gestiona contenido educativo y consulta reportes.")
+Rel(Minedu, PWA, "Supervisa y consulta métricas globales.")
+Rel(NinoTEA, MobileApp, "Interactúa con actividades y juegos.")
+Rel(Cuidador, MobileApp, "Asiste al niño y comunica observaciones.")
+
+Rel(PWA, Backend, "Solicitudes REST", "HTTPS")
+Rel(MobileApp, Backend, "Solicitudes REST", "HTTPS")
+
+@enduml

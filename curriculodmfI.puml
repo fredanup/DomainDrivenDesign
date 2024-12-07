@@ -1,0 +1,16 @@
+@startuml
+!define BoundedContext rectangle
+
+actor Docente as D
+
+BoundedContext "Curricular Management Context" as CurricularMgmt #yellow
+
+D -> CurricularMgmt : CrearUnidadDidactica
+
+
+D -> CurricularMgmt : ActualizarUnidadDidactica
+
+D -> CurricularMgmt : AgregarCompetenciaAUnidad
+
+
+@enduml

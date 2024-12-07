@@ -1,0 +1,52 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(Sistema, "Sistema Educativo con RA") {
+
+    Container_Boundary(Frontend, "Frontend") {
+        Container(PWA, "Progressive Web App (PWA)", "React.js", "Interfaz web utilizada por docentes y MINEDU.")
+        Container(AndroidApp, "Aplicación Android", "Kotlin + ARCore", "Aplicación móvil para estudiantes y cuidadores.")
+        Container(iOSApp, "Aplicación iOS", "SwiftUI + ARKit", "Aplicación móvil para estudiantes y cuidadores.")
+    }
+
+    Container_Boundary(Backend, "Backend") {
+        Container(API_Gateway, "API Gateway", "Spring Boot", "Orquesta solicitudes entre frontend y microservicios.")
+        Container(GestionCurricular, "Gestión Curricular", "Spring Boot", "Maneja la programación curricular y los contenidos educativos.")
+        Container(GestionActividades, "Gestión de Actividades", "Spring Boot", "Administra actividades, asignaciones y progreso.")
+        Container(Evaluaciones, "Evaluaciones y Seguimiento", "Spring Boot", "Genera reportes y gestiona evaluaciones.")
+    }
+
+    Container_Boundary(Infraestructura, "Infraestructura") {
+        Container(PostgreSQL, "Base de Datos", "PostgreSQL", "Almacena contenido curricular, actividades y progreso.")
+        Container(Redis, "Redis Cache", "Sistema de Caché", "Almacena datos temporales para optimizar consultas.")
+        Container(EventStore, "Event Store", "Kafka", "Procesa eventos educativos en tiempo real.")
+        Container(Elastic, "Elasticsearch", "Motor de búsqueda", "Proporciona reportes y métricas avanzadas.")
+    }
+
+    Container_Boundary(ServiciosExternos, "Servicios Externos") {
+        Container(Firebase, "Firebase Auth", "Autenticación", "Valida las credenciales de los usuarios.")
+        Container(ARCore, "ARCore", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en Android.")
+        Container(ARKit, "ARKit", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en iOS.")
+    }
+}
+
+Rel(PWA, API_Gateway, "Solicitudes REST", "HTTPS")
+Rel(AndroidApp, API_Gateway, "Solicitudes REST", "HTTPS")
+Rel(iOSApp, API_Gateway, "Solicitudes REST", "HTTPS")
+
+Rel(API_Gateway, GestionCurricular, "Gestión de contenidos y currículo")
+Rel(API_Gateway, GestionActividades, "Gestión de actividades y progreso")
+Rel(API_Gateway, Evaluaciones, "Evaluación y generación de reportes")
+
+Rel(GestionCurricular, PostgreSQL, "Consultas y almacenamiento de datos curriculares", "JDBC")
+Rel(GestionActividades, PostgreSQL, "Consultas y almacenamiento de actividades", "JDBC")
+Rel(Evaluaciones, PostgreSQL, "Consultas para reportes y evaluaciones", "JDBC")
+Rel(Evaluaciones, Redis, "Consultas rápidas de datos cacheados")
+Rel(EventStore, Redis, "Procesamiento de eventos en caché", "Kafka")
+Rel(Evaluaciones, Elastic, "Consultas analíticas avanzadas")
+
+Rel(API_Gateway, Firebase, "Validación de autenticación")
+Rel(AndroidApp, ARCore, "Experiencias RA en Android")
+Rel(iOSApp, ARKit, "Experiencias RA en iOS")
+
+@enduml

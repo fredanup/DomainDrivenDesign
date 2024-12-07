@@ -1,0 +1,30 @@
+@startuml
+
+
+
+package "Backend" {
+    
+    component "Spring Boot Microservices" as Microservices {
+        component "Evaluaciones y Seguimiento" as Evaluaciones
+    }
+    
+    component "Redis Cache" as Redis
+}
+
+package "Infraestructura" {
+    component "Vault y Consul" as VaultConsul
+    component "Kafka" as Kafka
+    component "PostgreSQL Database" as PostgreSQL
+    component "Elasticsearch" as Elastic
+    component "Docker y Kubernetes" as DockerK8s
+}
+
+
+Kafka --> Evaluaciones : Procesar eventos en tiempo real
+
+DockerK8s --> Microservices : Orquestar microservicios
+DockerK8s --> Redis : Escalabilidad y caching
+
+
+
+@enduml

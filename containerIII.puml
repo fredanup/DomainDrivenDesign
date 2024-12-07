@@ -1,0 +1,18 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(Infrastructure, "Infraestructura y Servicios Externos") {
+    Container(PostgreSQL, "Base de Datos", "PostgreSQL", "Almacena contenido curricular, actividades y progreso.")
+    Container(Redis, "Redis Cache", "Sistema de Caché", "Almacena datos temporales para optimizar consultas.")
+    Container(EventStore, "Event Store", "Kafka", "Procesa eventos educativos en tiempo real.")
+    Container(Elastic, "Elasticsearch", "Motor de búsqueda", "Proporciona reportes y métricas avanzadas.")
+    Container(Firebase, "Firebase Auth", "Autenticación", "Valida las credenciales de los usuarios.")
+    Container(ARCore, "ARCore", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en Android.")
+    Container(ARKit, "ARKit", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en iOS.")
+}
+
+Redis -> EventStore: Procesamiento de eventos en caché
+PostgreSQL -> EventStore: Datos relacionados a eventos
+Elastic -> Evaluaciones: Consultas analíticas avanzadas
+Firebase -> API_Gateway: Validación de autenticación
+@enduml

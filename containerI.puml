@@ -1,0 +1,16 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(Frontend, "Frontend Interfaces") {
+    Container(PWA, "Progressive Web App (PWA)", "React.js", "Interfaz para docentes y MINEDU.")
+    Container(AndroidApp, "Aplicación Android", "Kotlin + ARCore", "Aplicación móvil para estudiantes y cuidadores.")
+    Container(iOSApp, "Aplicación iOS", "SwiftUI + ARKit", "Aplicación móvil para estudiantes y cuidadores.")
+}
+
+boundary "API Gateway" as APIGW
+
+PWA -> APIGW: Solicitudes REST
+AndroidApp -> APIGW: Solicitudes REST
+iOSApp -> APIGW: Solicitudes REST
+
+@enduml

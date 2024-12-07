@@ -1,0 +1,13 @@
+@startuml
+!define BoundedContext rectangle
+
+
+
+BoundedContext "Curricular Management Context" as CurricularMgmt #yellow
+BoundedContext "Event Management Context" as EventMgmt #grey
+
+
+CurricularMgmt -> EventMgmt : UnidadDidacticaCreada
+CurricularMgmt -> EventMgmt : UnidadDidacticaActualizada
+CurricularMgmt -> EventMgmt : CompetenciaAgregadaAUnidad
+@enduml

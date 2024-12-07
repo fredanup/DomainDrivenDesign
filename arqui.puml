@@ -1,0 +1,76 @@
+@startuml
+actor Docente as D
+actor Cuidador as C
+actor Niño as N
+actor "Minedu" as M
+
+package "Frontend" {
+    [Aplicación Android (Kotlin)] <<MobileApp>>
+    [Aplicación iOS (SwiftUI)] <<MobileApp>>
+    [Progressive Web App (PWA)] <<WebApp>>
+}
+
+package "Backend" {
+    component "API Gateway" as APIGW
+    component "Spring Boot Microservices" as Microservices {
+        component "Gestión Curricular" as GestionCurricular
+        component "Gestión de Actividades" as GestionActividades
+        component "Evaluaciones y Seguimiento" as Evaluaciones
+    }
+    component "Event Store" as EventStore
+    component "Redis Cache" as Redis
+}
+
+package "Infraestructura" {
+    component "Vault y Consul" as VaultConsul
+    component "Kafka" as Kafka
+    component "PostgreSQL Database" as PostgreSQL
+    component "Elasticsearch" as Elastic
+    component "Docker y Kubernetes" as DockerK8s
+}
+
+package "Servicios de RA" {
+    component "ARCore (Android)" as ARCore
+    component "ARKit (iOS)" as ARKit
+}
+
+package "Autenticación" {
+    component "Firebase Auth" as Firebase
+    component "OAuth2 + JWT" as OAuth2JWT
+}
+
+D --> [Progressive Web App (PWA)] : Planificar actividades
+C --> [Aplicación Android (Kotlin)] : Supervisar actividades
+N --> [Aplicación Android (Kotlin)] : Participar en RA
+C --> [Aplicación iOS (SwiftUI)] : Supervisar actividades
+N --> [Aplicación iOS (SwiftUI)] : Participar en RA
+M --> [Progressive Web App (PWA)] : Consultar reportes
+
+[Progressive Web App (PWA)] --> APIGW : Solicitudes REST
+[Aplicación Android (Kotlin)] --> APIGW : Solicitudes REST
+[Aplicación iOS (SwiftUI)] --> APIGW : Solicitudes REST
+
+APIGW --> GestionCurricular : Gestionar currículo
+APIGW --> GestionActividades : Crear y asignar actividades
+APIGW --> Evaluaciones : Evaluar progreso
+
+GestionCurricular --> PostgreSQL : Guardar datos curriculares
+GestionActividades --> EventStore : Registrar eventos
+Evaluaciones --> Redis : Consultar datos temporales
+Evaluaciones --> Elastic : Consultar reportes y métricas
+
+EventStore --> Kafka : Publicar eventos
+Kafka --> Evaluaciones : Procesar eventos en tiempo real
+
+GestionCurricular --> VaultConsul : Acceder a configuraciones seguras
+GestionActividades --> VaultConsul : Acceder a credenciales
+
+DockerK8s --> Microservices : Orquestar microservicios
+DockerK8s --> Redis : Escalabilidad y caching
+
+[Aplicación Android (Kotlin)] --> ARCore : Interacción RA
+[Aplicación iOS (SwiftUI)] --> ARKit : Interacción RA
+
+Firebase --> APIGW : Validar autenticación
+OAuth2JWT --> APIGW : Autorizar solicitudes
+@enduml

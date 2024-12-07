@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Boundary(Infrastructure, "Infraestructura y Servicios Externos") {
+    Component(AuthService, "Firebase Auth", "Servicio de autenticación", "Gestión de autenticación de usuarios.")
+    Component(ARCore, "ARCore", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en Android.")
+    Component(ARKit, "ARKit", "SDK de RA", "Proporciona experiencias de Realidad Aumentada en iOS.")
+    Component(EventStore, "Event Store", "Kafka", "Registro de eventos educativos en tiempo real.")
+    Component(Redis, "Redis Cache", "Sistema de caché", "Almacena datos temporales para optimizar consultas.")
+    Component(PostgreSQL, "PostgreSQL Database", "Base de datos", "Almacena información curricular, actividades y progreso.")
+    Component(Elastic, "Elasticsearch", "Motor de búsqueda", "Genera métricas y reportes avanzados.")
+}
+
+boundary "API Gateway" as APIGW
+
+APIGW -> AuthService: Validar autenticación
+APIGW -> EventStore: Publicar eventos
+APIGW -> PostgreSQL: Consultar datos persistentes
+APIGW -> Elastic: Consultar reportes avanzados
+
+AndroidApp -> ARCore: Interacción en RA
+iOSApp -> ARKit: Interacción en RA
+
+@enduml

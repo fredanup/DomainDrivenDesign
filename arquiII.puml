@@ -1,0 +1,45 @@
+@startuml
+
+
+package "Backend" {
+    component "API Gateway" as APIGW
+    component "Spring Boot Microservices" as Microservices {
+        component "Gestión Curricular" as GestionCurricular
+        component "Gestión de Actividades" as GestionActividades
+        component "Evaluaciones y Seguimiento" as Evaluaciones
+    }
+    component "Event Store" as EventStore
+    component "Redis Cache" as Redis
+}
+
+package "Infraestructura" {
+    component "Vault y Consul" as VaultConsul
+    component "Kafka" as Kafka
+    component "PostgreSQL Database" as PostgreSQL
+    component "Elasticsearch" as Elastic
+
+}
+
+
+
+
+APIGW --> GestionCurricular : Gestionar currículo
+APIGW --> GestionActividades : Crear y asignar actividades
+APIGW --> Evaluaciones : Evaluar progreso
+
+GestionCurricular --> PostgreSQL : Guardar datos curriculares
+GestionActividades --> EventStore : Registrar eventos
+Evaluaciones --> Redis : Consultar datos temporales
+Evaluaciones --> Elastic : Consultar reportes y métricas
+
+EventStore --> Kafka : Publicar eventos
+Kafka --> Evaluaciones : Procesar eventos en tiempo real
+
+GestionCurricular --> VaultConsul : Acceder a configuraciones seguras
+GestionActividades --> VaultConsul : Acceder a credenciales
+
+
+
+
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+!define BoundedContext rectangle
+
+actor Docente as D
+
+BoundedContext "Session Management Context" as SessionMgmt #orange
+BoundedContext "Curricular Management Context" as CurricularMgmt #yellow
+BoundedContext "Event Management Context" as EventMgmt #grey
+
+D -> SessionMgmt : CrearSesion
+SessionMgmt -> CurricularMgmt : Consultar matriz de aprendizaje
+SessionMgmt -> EventMgmt : SesionCreada
+
+D -> SessionMgmt : ReprogramarSesion
+SessionMgmt -> EventMgmt : SesionReprogramada
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+
+
+package "Servicios de RA" {
+    component "ARCore (Android)" as ARCore
+    component "ARKit (iOS)" as ARKit
+}
+
+@enduml

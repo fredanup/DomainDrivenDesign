@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(Backend, "Spring Boot Microservices") {
+    Component(CurriculumController, "Curriculum Controller", "REST Controller", "Gestiona programación curricular y contenido educativo.")
+    Component(ActivityController, "Activity Controller", "REST Controller", "Administra actividades y tareas de los estudiantes.")
+    Component(EvaluationController, "Evaluation Controller", "REST Controller", "Gestiona evaluaciones y reportes.")
+    Component(EventService, "Event Service", "Service", "Publica y consume eventos educativos en Event Store.")
+    Component(ReportingService, "Reporting Service", "Service", "Genera reportes y métricas detalladas.")
+    Component(DatabaseService, "Database Service", "Service", "Encapsula la interacción con PostgreSQL.")
+    Component(CacheService, "Cache Service", "Service", "Gestiona el acceso a datos temporales en Redis.")
+}
+
+CurriculumController -> DatabaseService: Consultar contenido educativo
+ActivityController -> DatabaseService: Guardar tareas y progreso
+EvaluationController -> DatabaseService: Consultar reportes y progreso
+EvaluationController -> CacheService: Consultar progreso temporal
+CacheService -> Redis: Acceso rápido a datos cacheados
+EventService -> EventStore: Publicar y consumir eventos educativos
+ReportingService -> Elastic: Consultar métricas y reportes analíticos
+
+@enduml

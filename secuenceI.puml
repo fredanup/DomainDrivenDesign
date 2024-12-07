@@ -1,0 +1,39 @@
+@startuml
+actor "Cuidador" as C
+actor "Niño con TEA" as N
+boundary "Aplicación Android (Kotlin)" as AppKotlin
+boundary "API Gateway" as APIGW
+control "Gestión de Actividades" as GestionActividades
+control "Evaluaciones y Seguimiento" as Evaluaciones
+database "PostgreSQL Database" as PostgreSQL
+boundary "ARCore (Android)" as ARCore
+entity "Redis Cache" as Redis
+collections "Event Store" as EventStore
+
+C -> AppKotlin: Supervisar actividad
+N -> AppKotlin: Iniciar tarea en RA
+AppKotlin -> APIGW: Solicitar contenido de la actividad
+APIGW -> GestionActividades: Obtener detalles de actividad
+GestionActividades -> PostgreSQL: Consultar detalles de actividad
+PostgreSQL --> GestionActividades: Retornar detalles
+GestionActividades --> APIGW: Detalles de actividad
+APIGW --> AppKotlin: Enviar contenido de actividad
+
+N -> AppKotlin: Interactuar con actividad RA
+AppKotlin -> ARCore: Cargar experiencia RA
+ARCore --> AppKotlin: Renderizar contenido RA
+
+AppKotlin -> APIGW: Reportar progreso en la actividad
+APIGW -> EventStore: Registrar evento de progreso
+EventStore -> Redis: Cachear progreso para consulta rápida
+EventStore --> APIGW: Confirmación de registro
+APIGW --> AppKotlin: Progreso registrado
+
+C -> AppKotlin: Consultar progreso
+AppKotlin -> APIGW: Solicitar progreso
+APIGW -> Evaluaciones: Obtener progreso del niño
+Evaluaciones -> Redis: Consultar progreso cacheado
+Redis --> Evaluaciones: Datos de progreso
+Evaluaciones --> APIGW: Datos consolidados
+APIGW --> AppKotlin: Mostrar progreso al cuidador
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+!define BoundedContext rectangle
+
+actor Docente as D
+
+BoundedContext "Evaluation Context" as EvalMgmt #green
+BoundedContext "Session Management Context" as SessionMgmt #orange
+BoundedContext "Game Management Context" as GameMgmt #pink
+BoundedContext "Event Management Context" as EventMgmt #grey
+
+D -> EvalMgmt : CrearCriterioEvaluacion
+
+
+D -> EvalMgmt : CompletarEvaluacion
+EvalMgmt -> SessionMgmt : Consultar progreso de sesiones
+EvalMgmt -> GameMgmt : Consultar resultados de juegos
+
+
+D -> EvalMgmt : GenerarReporteEvaluacion
+EvalMgmt -> EventMgmt : Reporte
+@enduml
